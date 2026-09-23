@@ -35,3 +35,12 @@ jobs:
 
       - name: Test
         run: dotnet run --project tests/EntityFrameworkCore.Functional.Tests/EntityFrameworkCore.Functional.Tests.csproj --configuration Release --no-restore
+
+      - name: Pack
+        run: >
+          dotnet pack
+          EntityFrameworkCore.Functional/EntityFrameworkCore.Functional.csproj
+          --configuration Release
+          --no-restore
+          --output artifacts
+          -p:PackageVersion=0.0.0-ci

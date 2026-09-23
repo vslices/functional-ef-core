@@ -90,6 +90,10 @@ public sealed class FunctionalEfCoreIntegrationTests(PostgreSqlFixture database)
 
         Assert.True(found.IsSome);
 
+        // Find correctly attaches the resolved instance. Clear it before exercising
+        // UpdateIO with the original detached instance of the same identity.
+        context.ChangeTracker.Clear();
+
         record.Name = "updated";
         var updated = await context.UpdateIO(record).RunAsync();
         Assert.Equal(EntityState.Modified, updated.State);
@@ -101,13 +105,15 @@ public sealed class FunctionalEfCoreIntegrationTests(PostgreSqlFixture database)
             await context.Records
                 .Where(x => x.Id == record.Id)
                 .Select(x => x.Name)
-                .SingleAsync());
+                .SingleAsync(TestContext.Current.CancellationToken));
 
         var removed = await context.RemoveIO(record).RunAsync();
         Assert.Equal(EntityState.Deleted, removed.State);
         await context.SaveChangesIO().RunAsync();
 
-        Assert.False(await context.Records.AnyAsync(x => x.Id == record.Id));
+        Assert.False(await context.Records.AnyAsync(
+            x => x.Id == record.Id,
+            TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -145,7 +151,9 @@ public sealed class FunctionalEfCoreIntegrationTests(PostgreSqlFixture database)
                 .Where(x => x.Name == "change")
                 .Select(x => x.Quantity)
                 .SingleAsync());
-        Assert.False(await context.Records.AnyAsync(x => x.Name == "delete"));
+        Assert.False(await context.Records.AnyAsync(
+            x => x.Name == "delete",
+            TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -167,7 +175,9 @@ public sealed class FunctionalEfCoreIntegrationTests(PostgreSqlFixture database)
 
         await using (var verification = database.CreateContext())
         {
-            Assert.False(await verification.Records.AnyAsync(x => x.Name == "rolled-back"));
+            Assert.False(await verification.Records.AnyAsync(
+                x => x.Name == "rolled-back",
+                TestContext.Current.CancellationToken));
         }
 
         await using (var context = database.CreateContext())
@@ -183,6 +193,8 @@ public sealed class FunctionalEfCoreIntegrationTests(PostgreSqlFixture database)
         }
 
         await using var finalVerification = database.CreateContext();
-        Assert.True(await finalVerification.Records.AnyAsync(x => x.Name == "committed"));
+        Assert.True(await finalVerification.Records.AnyAsync(
+            x => x.Name == "committed",
+            TestContext.Current.CancellationToken));
     }
 }

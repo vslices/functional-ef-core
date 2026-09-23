@@ -1,20 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
 
-	<ItemGroup>
-		<PackageReference Include="LanguageExt.Core" Version="5.0.0-beta-77" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.11" />
-	</ItemGroup>
+    <PackageId>VSlices.EntityFrameworkCore.Functional</PackageId>
+    <Authors>Hernán Alvarez; VSlices Development</Authors>
+    <Company>VSlices</Company>
+    <Description>Functional, effectful Entity Framework Core extensions built on LanguageExt.</Description>
+    <PackageTags>entity-framework-core;efcore;functional;language-ext;effects;vslices</PackageTags>
+    <PackageProjectUrl>https://github.com/vslices/functional-ef-core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vslices/functional-ef-core</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<Using Include="LanguageExt" />
-		<Using Include="LanguageExt.Prelude" Static="true" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="LanguageExt.Core" Version="5.0.0-beta-77" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="LanguageExt" />
+    <Using Include="LanguageExt.Prelude" Static="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 
 </Project>

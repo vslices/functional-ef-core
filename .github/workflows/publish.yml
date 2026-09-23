@@ -1,0 +1,67 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Resolve package version
+        id: version
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Tag '$GITHUB_REF_NAME' does not contain a valid SemVer package version." >&2
+            exit 1
+          fi
+
+          echo "value=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Verify Docker
+        run: docker info
+
+      - name: Restore
+        run: dotnet restore functional-ef-core.slnx
+
+      - name: Test
+        run: dotnet run --project tests/EntityFrameworkCore.Functional.Tests/EntityFrameworkCore.Functional.Tests.csproj --configuration Release --no-restore
+
+      - name: Pack
+        run: >
+          dotnet pack
+          EntityFrameworkCore.Functional/EntityFrameworkCore.Functional.csproj
+          --configuration Release
+          --no-restore
+          --output artifacts
+          -p:PackageVersion=${{ steps.version.outputs.value }}
+
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Publish
+        run: >
+          dotnet nuget push artifacts/*.nupkg
+          --api-key ${{ steps.login.outputs.NUGET_API_KEY }}
+          --source https://api.nuget.org/v3/index.json

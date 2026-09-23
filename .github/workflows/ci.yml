@@ -34,4 +34,4 @@ jobs:
         run: dotnet restore functional-ef-core.slnx
 
       - name: Test
-        run: dotnet test functional-ef-core.slnx --configuration Release --no-restore
+        run: dotnet run --project tests/EntityFrameworkCore.Functional.Tests/EntityFrameworkCore.Functional.Tests.csproj --configuration Release --no-restore

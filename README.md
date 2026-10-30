@@ -1,10 +1,10 @@
 # VSlices.EntityFrameworkCore.Functional
 
-Functional, effectful extensions for Entity Framework Core built on [LanguageExt](https://github.com/louthy/language-ext).
+Functional, effectful extensions for Entity Framework Core built on [VSlices](https://github.com/vslices/framework) using its MIT-attributed \`ForkExt\` source extraction from [LanguageExt](https://github.com/louthy/language-ext).
 
 The package keeps ordinary query composition as ordinary EF Core composition and wraps operations that actually cross the I/O boundary in `IO` / `OptionT<IO, A>`.
 
-## Install
+## Repository coupling\n\nWhile VSlices/ForkExt is on PR #179, this repository builds against a sibling checkout of \`vslices/framework\` under \`framework/\`. The CI workflow creates this checkout. Packaged consumers depend on the VSlices package rather than LanguageExt.Core.\n\n## Install
 
 ```bash
 dotnet add package VSlices.EntityFrameworkCore.Functional

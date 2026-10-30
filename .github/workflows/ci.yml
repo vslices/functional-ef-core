@@ -22,6 +22,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Checkout VSlices ForkExt candidate
+        uses: actions/checkout@v4
+        with:
+          repository: vslices/framework
+          ref: refactor/forkext-extract-minimal
+          path: framework
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -30,9 +36,16 @@ jobs:
       - name: Verify Docker
         run: docker info
 
+      - name: Reject original LanguageExt dependency
+        run: |
+          if grep -R 'PackageReference Include="LanguageExt.Core"' EntityFrameworkCore.Functional; then exit 1; fi
       - name: Restore
         run: dotnet restore functional-ef-core.slnx
 
+      - name: Check dependency graph
+        run: |
+          dotnet list functional-ef-core.slnx package --include-transitive > dependency-list.txt
+          if grep -i 'LanguageExt.Core' dependency-list.txt; then exit 1; fi
       - name: Test
         run: dotnet run --project tests/EntityFrameworkCore.Functional.Tests/EntityFrameworkCore.Functional.Tests.csproj --configuration Release --no-restore
 

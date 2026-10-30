@@ -5,11 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <VSlicesProjectPath Condition="'$(VSlicesProjectPath)' == '' and Exists('$(MSBuildThisFileDirectory)../../src/VSlices/VSlices.csproj')">$(MSBuildThisFileDirectory)../../src/VSlices/VSlices.csproj</VSlicesProjectPath>
+    <VSlicesProjectPath Condition="'$(VSlicesProjectPath)' == ''">$(MSBuildThisFileDirectory)../framework/src/VSlices/VSlices.csproj</VSlicesProjectPath>
     <PackageId>VSlices.EntityFrameworkCore.Functional</PackageId>
     <Authors>Hernán Alvarez; VSlices Development</Authors>
     <Company>VSlices</Company>
-    <Description>Functional, effectful Entity Framework Core extensions built on LanguageExt.</Description>
-    <PackageTags>entity-framework-core;efcore;functional;language-ext;effects;vslices</PackageTags>
+    <Description>Functional, effectful Entity Framework Core extensions built on VSlices ForkExt.</Description>
+    <PackageTags>entity-framework-core;efcore;functional;forkext;effects;vslices</PackageTags>
     <PackageProjectUrl>https://github.com/vslices/functional-ef-core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/vslices/functional-ef-core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -18,14 +20,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LanguageExt.Core" Version="5.0.0-beta-77" />
+    <ProjectReference Include="$(VSlicesProjectPath)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="LanguageExt" />
-    <Using Include="LanguageExt.Prelude" Static="true" />
+    <Using Include="ForkExt" />
+    <Using Include="ForkExt.Prelude" Static="true" />
   </ItemGroup>
 
   <ItemGroup>

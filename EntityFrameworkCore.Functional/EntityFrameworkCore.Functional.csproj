@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <VSlicesProjectPath Condition="'$(VSlicesProjectPath)' == '' and Exists('$(MSBuildThisFileDirectory)../../src/VSlices/VSlices.csproj')">$(MSBuildThisFileDirectory)../../src/VSlices/VSlices.csproj</VSlicesProjectPath>
     <VSlicesProjectPath Condition="'$(VSlicesProjectPath)' == ''">$(MSBuildThisFileDirectory)../framework/src/VSlices/VSlices.csproj</VSlicesProjectPath>
     <PackageId>VSlices.EntityFrameworkCore.Functional</PackageId>
     <Authors>Hernán Alvarez; VSlices Development</Authors>

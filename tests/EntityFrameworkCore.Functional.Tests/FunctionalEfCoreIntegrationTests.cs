@@ -1,6 +1,6 @@
 using EntityFrameworkCore.Functional;
-using LanguageExt;
-using LanguageExt.Traits;
+using ForkExt;
+using ForkExt.Traits;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 

@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <VSlicesProjectPath Condition="'$(VSlicesProjectPath)' == ''">$(MSBuildThisFileDirectory)../framework/src/VSlices/VSlices.csproj</VSlicesProjectPath>
     <PackageId>VSlices.EntityFrameworkCore.Functional</PackageId>
     <Authors>Hernán Alvarez; VSlices Development</Authors>
     <Company>VSlices</Company>
@@ -18,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../framework/src/VSlices/VSlices.csproj" />
+    <ProjectReference Include="$(VSlicesProjectPath)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.11" />
   </ItemGroup>
